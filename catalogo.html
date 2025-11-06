@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>₿TC BURGER</title>
+  <link rel="icon" href="proyecto_cafe/img/favicon.jpg" type="image/png">
+  <!-- Hoja de estilos principal: contiene tipografías, colores, layout y reglas responsive. -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header>
+    <h1>₿TC BURGER</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html" class="activo">Catalogo</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="productos">
+      <h2>Nuestro Catálogo</h2>
+  
+      <div class="tarjetas">
+  
+        <!-- Producto 1 -->
+        <div class="tarjeta">
+          <img class="img-producto" src="proyecto_cafe/img/btcburger2.png" alt="Hamburgesa Simple">
+          <h3>Hamburguesa Simple</h3>
+          <p>Con pan casero, tomate, lechuga, cebolla, carne y cheddar.</p>
+          <div class="acciones">
+            <label for="cantidad1">Cantidad:</label>
+            <input type="number" id="cantidad1" min="1" value="1">
+            <button onclick="agregarAlCarrito('Hamburguesa Simple', document.getElementById('cantidad1').value)">Comprar</button>
+          </div>
+        </div>
+  
+        <!-- Producto 2 -->
+        <div class="tarjeta">
+          <img class="img-producto" src="proyecto_cafe/img/btcburger1.png" alt="Hamburgesa Doble">
+          <h3>Hamburguesa Doble</h3>
+          <p>Con pan casero, tomate, lechuga, cebolla, doble carne y cheddar.</p>
+          <div class="acciones">
+            <label for="cantidad2">Cantidad:</label>
+            <input type="number" id="cantidad2" min="1" value="1">
+            <button onclick="agregarAlCarrito('Hamburguesa Doble', document.getElementById('cantidad2').value)">Comprar</button>
+          </div>
+        </div>
+  
+        <!-- Producto 3 -->
+        <div class="tarjeta">
+          <img class="img-producto" src="proyecto_cafe/img/btcburger3.jpg" alt="Hamburgesa Triple">
+          <h3>Hamburguesa Triple</h3>
+          <p>Pan artesanal con jamón y queso, tostado a la perfección.</p>
+          <div class="acciones">
+            <label for="cantidad3">Cantidad:</label>
+            <input type="number" id="cantidad3" min="1" value="1">
+            <button onclick="agregarAlCarrito('Hamburguesa Triple', document.getElementById('cantidad3').value)">Comprar</button>
+          </div>
+        </div>
+
+
+         <!-- Producto 4 -->
+        <div class="tarjeta">
+          <img class="img-producto" src="proyecto_cafe/img/conopapa.png" alt="Cono de Papa">
+          <h3>Cono de Papa</h3>
+          <p>Cono de papa, con Mayonesa, Mostaza, Ketchup, Salsa Golf, etc.</p>
+          <div class="acciones">
+            <label for="cantidad3">Cantidad:</label>
+            <input type="number" id="cantidad3" min="1" value="1">
+            <button onclick="agregarAlCarrito('Cono de Papa', document.getElementById('cantidad3').value)">Comprar</button>
+          </div>
+        </div>
+  
+      </div>
+  
+    </section>
+  </main>
+  
+
+  <footer>
+    <!-- Footer: información de derechos de autor / ubicación -->
+    <p>© 2025 ₿TC BURGER | Mina Clavero, Córdoba</p>
+  </footer>
+</body>
+</html>

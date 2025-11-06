@@ -1,0 +1,3 @@
+<img class="foto-mapa" src="proyecto_cafe/img/mapa.png" alt="ubicacion del local">
+
+ubicacion del local

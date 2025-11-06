@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>₿TC BURGER</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="proyecto_cafe/img/favicon.jpg" type="image/png">
+  <!-- Fuente moderna: Poppins (varios pesos) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Pequeño ajuste para el scroll suave si el navegador no soporta CSS */
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Header: título del sitio y navegación principal. -->
+    <h1>₿TC BURGER</h1>
+    <nav>
+      <!-- La clase 'activo' resalta la página actual; se actualiza desde JS. -->
+      <a href="index.html" class="activo">Inicio</a>
+      <a href="catalogo.html">Catalogo</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Inicio -->
+    <section id="inicio" class="hero">
+      <!-- Hero: área destacada con título, subtítulo y llamada a la acción -->
+      <h2>Las Mejores Hamburgesas del Valle de Traslasierra</h2>
+      <p>Disfrutá de las mejores hamburgesas del valle de Traslasierra.</p>
+      <a href="catalogo.html" class="boton">Ver nuestro catalogo.</a>
+    </section>
+
+    <!-- Sobre nosotros -->
+    <section class="nosotros" id="nosotros">
+      <!-- Sección informativa sobre la cafetería y su filosofía. -->
+      <h2>Sobre nosotros</h2>
+      <p>Somos un negocio familiar ubicado en Mina Clavero, Córdoba. Preparamos cada comida con dedicación y amor.</p>
+      <div class="imagen-nosotros">
+        <!-- Imagen principal de la cafetería -->
+        <img class="foto-nosotros" src="proyecto_cafe/img/btcburger1.png" alt="Taza de café artesanal">
+        </div>
+
+        <h2>Ubicacion</h2>
+        <p>Estas invitado a pasarte por nuestro local!, esta ubicado por San Martin 1337.</p>
+        <div class="imagen-nosotros">
+          <!-- Imagen principal de la cafetería -->
+          <img class="foto-mapa" src="proyecto_cafe/img/mapa.png" alt="ubicacion del local">
+          </div>
+
+
+    </section>
+
+    <!-- Productos: ahora en productos.html -->
+
+    ...
+  </main>
+
+  <footer>
+    <!-- Footer: información de derechos de autor / ubicación -->
+    <p>© 2025 ₿TC BURGER | Mina Clavero, Córdoba</p>
+  </footer>
+
+  <script>
+    // Resalta el enlace activo (funciona en páginas separadas)
+    const navLinks = document.querySelectorAll('header nav a');
+
+    /*
+      setActiveLink(): detecta la ruta actual y aplica/remueve la clase 'activo'
+      - window.location.pathname se usa para obtener el nombre del archivo actual
+      - Esto permite resaltar "Inicio", "Productos" o "Contacto" según la página
+    */
+    function setActiveLink() {
+      const path = window.location.pathname.replace(/.*\//, '');
+      navLinks.forEach(link => link.classList.remove('activo'));
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === path || (href.endsWith('index.html') && path === '')) {
+          link.classList.add('activo');
+        }
+      });
+    }
+
+    setActiveLink();
+
+    // Forzar comportamiento suave al hacer click en anclas internas (compatibilidad)
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // --- Envío del formulario ---
+    // Comentarios sobre FORM_ENDPOINT:
+    // - '' (vacío): fallback a mailto (abre cliente de correo local)
+    // - 'tu@correo.com': se utilizará FormSubmit (POST tradicional redirigido)
+    // - 'https://...' (URL completa): se intentará enviar por AJAX con fetch (atención a CORS en el endpoint)
+    const FORM_ENDPOINT = 'veronica.noelia.riquelme.vr@gmail.com';
+
+    // Referencias al formulario y al contenedor de estado
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('formStatus');
+
+    /*
+      showStatus(message, ok): actualiza el elemento de estado del formulario
+      - message: texto a mostrar
+      - ok: booleano que añade clase 'ok' o 'error' para estilos
+    */
+    function showStatus(message, ok = true) {
+      status.textContent = message;
+      status.className = 'form-status ' + (ok ? 'ok' : 'error');
+    }
+
+    // Si la URL contiene ?sent=1 mostramos un mensaje de agradecimiento (redirección desde FormSubmit)
+    if (new URLSearchParams(window.location.search).get('sent') === '1') {
+      showStatus('Gracias — recibimos tu mensaje. Te contactaremos pronto.', true);
+    }
+
+    // Manejo del evento submit del formulario:
+    // 1) Validar campos del formulario (HTML5 validity)
+    // 2) Dependiendo de FORM_ENDPOINT: mailto, FormSubmit (POST tradicional) o AJAX
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        showStatus('Por favor completá todos los campos correctamente.', false);
+        return;
+      }
+
+      const data = {
+        nombre: form.nombre.value,
+        email: form.email.value,
+        mensaje: form.mensaje.value
+      };
+
+      // 1) Si no hay endpoint configurado -> abrir cliente de correo (mailto)
+      if (!FORM_ENDPOINT) {
+        const subject = encodeURIComponent('Contacto desde sitio - ' + data.nombre);
+        const body = encodeURIComponent(`${data.mensaje}\n\nContacto: ${data.email}`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        return;
+      }
+
+      // 2) Si FORM_ENDPOINT contiene un '@' -> se asume un email y se usa FormSubmit
+      if (FORM_ENDPOINT.includes('@')) {
+        showStatus('Redirigiendo para enviar el mensaje...', true);
+        form.action = `https://formsubmit.co/${encodeURIComponent(FORM_ENDPOINT)}`;
+        form.method = 'POST';
+        // Rellenar campos ocultos para FormSubmit (_next para redirección, _captcha para desactivar)
+        const nextInput = document.getElementById('_next');
+        const captchaInput = document.getElementById('_captcha');
+        // Redirigir de vuelta a la página actual con ?sent=1 para mostrar mensaje de éxito
+        nextInput.value = window.location.origin + window.location.pathname + '?sent=1#contacto';
+        captchaInput.value = 'false';
+        form.submit();
+        return;
+      }
+
+      // 3) Si FORM_ENDPOINT es una URL, se intenta enviar por AJAX (fetch). Cuidado con CORS.
+      try {
+        showStatus('Enviando...', true);
+        const res = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          showStatus('¡Mensaje enviado! Gracias por contactarnos.', true);
+          form.reset();
+        } else {
+          const text = await res.text();
+          console.error('Error envío formulario', res.status, text);
+          showStatus('Hubo un error al enviar. Intentá nuevamente más tarde.', false);
+        }
+      } catch (err) {
+        console.error(err);
+        showStatus('No se pudo conectar con el servidor. Probá usar tu correo (dejar FORM_ENDPOINT vacío) o poné tu email en FORM_ENDPOINT para usar FormSubmit.', false);
+      }
+    });
+  </script>
+</body>
+</html>

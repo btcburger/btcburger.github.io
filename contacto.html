@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>₿TC BURGER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="proyecto_cafe/img/favicon.jpg" type="image/png">
+</head>
+<body>
+  <header>
+    <h1>₿TC BURGER</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html">Catalogo</a>
+      <a href="contacto.html" class="activo">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="contacto">
+      <h2>Contacto</h2>
+      <p>Si querés hacer un pedido o tenés alguna consulta, completá el siguiente formulario:</p>
+
+  <!-- Banner de agradecimiento: oculto por defecto, se muestra cuando la URL incluye ?sent=1 -->
+  <div class="banner" id="thankYou" style="display:none;">¡Gracias! Recibimos tu mensaje.</div>
+
+      <!--
+        Formulario de contacto:
+        - action apunta a FormSubmit con el correo configurado (envío por POST)
+        - Campos obligatorios: nombre, email, mensaje
+        - Campos ocultos (_next y _captcha) controlan la redirección y captcha de FormSubmit
+      -->
+      <form id="contactForm" action="https://formsubmit.co/btcburger@gmail.com" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" name="email" placeholder="tucorreo@example.com" required>
+
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" name="mensaje" rows="6" placeholder="Escribí tu mensaje aquí..." required></textarea>
+
+  <!-- Campos para FormSubmit (con id para que el JS pueda rellenarlos) -->
+  <input type="hidden" id="_next" name="_next" value="index.html?sent=1#contacto">
+  <input type="hidden" id="_captcha" name="_captcha" value="false">
+
+        <button type="submit" class="btn-enviar">Enviar</button>
+      </form>
+
+        <!-- Contenedor para mensajes de estado (validación / envío) -->
+        <div id="formStatus" class="form-status" style="display:none;"></div>
+
+        <div style="text-align: center;">
+        <a href="https://www.instagram.com/btc.burgerr/" target="_blank" rel="noopener noreferrer">
+        <img src="proyecto_cafe/img/instagramlogo.png" alt="Logo instagram" style="width:50px; height:auto;">
+        </a>
+</div>
+
+
+
+
+    </section>
+  </main>
+
+  <footer>
+    <!-- Footer: información de derechos de autor / ubicación -->
+    <p>© 2025 ₿TC BURGER | Mina Clavero, Córdoba</p>
+  </footer>
+
+  <script>
+    // Mostrar banner si la URL contiene sent=1
+    if (new URLSearchParams(window.location.search).get('sent') === '1') {
+      const b = document.getElementById('thankYou');
+      b.style.display = 'block';
+    }
+
+    // Manejo avanzado del formulario para evitar errores al enviar.
+    (function() {
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('formStatus');
+      const nextInput = document.getElementById('_next');
+      const captchaInput = document.getElementById('_captcha');
+
+      function showStatus(msg, ok = true) {
+        status.style.display = 'block';
+        status.textContent = msg;
+        status.className = 'form-status ' + (ok ? 'ok' : 'error');
+      }
+
+      form.addEventListener('submit', function(e) {
+        // Validación HTML5
+        if (!form.checkValidity()) {
+          e.preventDefault();
+          showStatus('Por favor completá todos los campos correctamente.', false);
+          return;
+        }
+
+        // Rellenamos los campos ocultos para FormSubmit antes de dejar que el formulario haga POST
+        // Esto asegura que FormSubmit redirija de vuelta a esta misma página con ?sent=1
+        try {
+          nextInput.value = window.location.origin + window.location.pathname.replace(/[^\/]+$/, 'contacto.html') + '?sent=1#contacto';
+        } catch (err) {
+          // En caso de error al componer la URL, prevenimos envío y mostramos mensaje
+          e.preventDefault();
+          console.error('Error al preparar la redirección:', err);
+          showStatus('No fue posible preparar el envío. Intentá nuevamente más tarde.', false);
+          return;
+        }
+        captchaInput.value = 'false';
+
+        // Dejamos que el formulario haga el envío normal (no AJAX) a FormSubmit
+        showStatus('Redirigiendo para enviar el mensaje...', true);
+        // Nota: no hacemos e.preventDefault(); el envío continúa.
+      });
+    })();
+  </script>
+</body>
+</html>
